@@ -1,4 +1,20 @@
-expenses = []
+import json
+
+def verileri_yukle():
+    try:
+        with open("harcamalar.json", "r", encoding="utf-8") as dosya:
+            return json.load(dosya)
+    except FileNotFoundError:
+       
+        return []
+
+def verileri_kaydet(harcama_listesi):
+
+    with open("harcamalar.json", "w", encoding="utf-8") as dosya:
+        json.dump(harcama_listesi, dosya, ensure_ascii=False, indent=4)
+
+
+expenses = verileri_yukle()
 
 while True:
     print("----işlemler----")
@@ -16,18 +32,15 @@ while True:
         title = input("Harcama başlığı: ")
         category = input("Kategori: ")
         
-        # Hata yakalama zırhımız başlıyor!
         try:
-            # Önce sayıya çevirmeyi DENİYORUZ
             amount = float(input("Tutar: "))
             
-            # Eğer üst satırda hata çıkmazsa (başarıyla sayı girildiyse) eklemeye devam ediyoruz
             expense = {"title": title, "category": category, "amount": amount}
             expenses.append(expense)
             print("Harcama başarıyla eklendi!")
-            
+            verileri_kaydet(expenses)
+
         except ValueError:
-            # Eğer kullanıcı sayı yerine harf/metin girerse program çökmek yerine buraya atlar
             print("Hata: Lütfen tutar kısmına sadece sayı giriniz! (Örn: 150 veya 150.5)")
 
     elif choice == "2":
@@ -63,7 +76,8 @@ while True:
                 expenses[index]["amount"] = new_amount
                 
                 print("Harcama başarıyla güncellendi!")
-                
+                verileri_kaydet(expenses)
+
             except ValueError:
                 print("Hata: Numara veya tutar seçimi yaparken lütfen sadece sayı giriniz!")
             except IndexError:
@@ -85,7 +99,7 @@ while True:
             expenses.pop(index)
             
             print("Harcama başarıyla silindi!")
-
+            verileri_kaydet(expenses)
 
     elif choice == "5":
         print("İstatistikler hesaplanıyor...")
