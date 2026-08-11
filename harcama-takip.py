@@ -13,17 +13,22 @@ while True:
     choice = input("Lütfen yapmak istediğiniz işlemi seçin (1-7): ")
 
     if choice == "1":
-     print("Harcama ekleme işlemi başlatılıyor...")
-     title = input("Harcama için bir başlık girin: ")
-     category = input("Harcamanın türünü girin: ")
-     amount = float(input("Harcamanın fiyatını girin: "))
-     expenses.append({
-        "title": title,
-        "category": category,
-        "amount": amount
-     })
-    
-     print("Harcama başarıyla eklendi!")
+        title = input("Harcama başlığı: ")
+        category = input("Kategori: ")
+        
+        # Hata yakalama zırhımız başlıyor!
+        try:
+            # Önce sayıya çevirmeyi DENİYORUZ
+            amount = float(input("Tutar: "))
+            
+            # Eğer üst satırda hata çıkmazsa (başarıyla sayı girildiyse) eklemeye devam ediyoruz
+            expense = {"title": title, "category": category, "amount": amount}
+            expenses.append(expense)
+            print("Harcama başarıyla eklendi!")
+            
+        except ValueError:
+            # Eğer kullanıcı sayı yerine harf/metin girerse program çökmek yerine buraya atlar
+            print("Hata: Lütfen tutar kısmına sadece sayı giriniz! (Örn: 150 veya 150.5)")
 
     elif choice == "2":
      print("Harcamaları listeleme işlemi başlatılıyor...")
@@ -36,27 +41,33 @@ while True:
 
     
     elif choice == "3":
-        print("Harcama düzenleme işlemi başlatılıyor...")
-        if len(expenses) == 0:
+     print("Harcama düzenleme işlemi başlatılıyor...")
+     if len(expenses) == 0:
             print("Düzenlenebilir bir harcama bulunamadı! Lütfen harcama ekleyip tekrar deneyin.")
-        else:
+     else:
             i = 1
             for expense in expenses:
                 print(f"{i}. Başlık: {expense['title']} | Kategori: {expense['category']} | Tutar: {expense['amount']} TL")
                 i += 1
             
-            selection = int(input("Düzenlemek istediğiniz harcamanın numarasını girin: "))
-            index = selection - 1
-            
-            new_title = input("Yeni başlığı girin: ")
-            new_category = input("Yeni kategoriyi girin: ")
-            new_amount = float(input("Yeni tutarı girin: "))
-            
-            expenses[index]["title"] = new_title
-            expenses[index]["category"] = new_category
-            expenses[index]["amount"] = new_amount
-            
-            print("Harcama başarıyla güncellendi!")
+            try:
+                selection = int(input("Düzenlemek istediğiniz harcamanın numarasını girin: "))
+                index = selection - 1
+                
+                new_title = input("Yeni başlığı girin: ")
+                new_category = input("Yeni kategoriyi girin: ")
+                new_amount = float(input("Yeni tutarı girin: "))
+                
+                expenses[index]["title"] = new_title
+                expenses[index]["category"] = new_category
+                expenses[index]["amount"] = new_amount
+                
+                print("Harcama başarıyla güncellendi!")
+                
+            except ValueError:
+                print("Hata: Numara veya tutar seçimi yaparken lütfen sadece sayı giriniz!")
+            except IndexError:
+                print("Hata: Girdiğiniz numarada bir harcama listede bulunmuyor!")
             
     elif choice == "4":
         print("Harcama silme işlemi başlatılıyor...")
